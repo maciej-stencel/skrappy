@@ -1,4 +1,5 @@
 <?php
+	error_reporting(E_ALL);
 	include_once('classes/Request.php');
 	$request = new Request($_POST, Request::POST);
 	$get = new Request($_GET, Request::GET);
@@ -24,7 +25,12 @@
 					include_once('views/dispose.php');
 				} elseif ($get->has('view') && $get->get('view') == 'history') {
 					include_once('views/history.php');
+				} elseif ($get->has('view') && $get->get('view') == 'about') {
+					include_once('views/about.php');
+				} elseif ($get->has('view') && $get->get('view') == 'myProfile') {
+					include_once('views/myProfile.php');
 				}
+			include_once('views/footer.php');
 		?> 
 	<!--<script src="https://code.jquery.com/jquery-3.4.0.min.js"
 		integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="

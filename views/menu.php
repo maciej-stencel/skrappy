@@ -15,7 +15,7 @@
 						</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link" href="#">O nas</a>
+						<a class="nav-link" href="?view=about">O nas</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="?view=dispose">Dispose</a>
@@ -28,7 +28,7 @@
 							Imię Nazwisko
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-							<a class="dropdown-item" href="#">Moje ustawienia</a>
+							<a class="dropdown-item" href="?view=myProfile">Moje ustawienia</a>
 							<a class="dropdown-item" href="#">Wyloguj się</a>
 						</div>
 					</li>
