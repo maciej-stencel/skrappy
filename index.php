@@ -15,16 +15,15 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 
-	<body>
+	<body> 
 		<?php 
-			include_once('views/menu.php'); 
-			echo '</br>';
+			include_once('views/menu.php');
 				if (!$get->has('view') && !$get->get('view')) {
 					include_once('views/body.php'); 
 				} elseif ($get->has('view') && $get->get('view') == 'dispose') {
-					include_once('dispose.php');
+					include_once('views/dispose.php');
 				} elseif ($get->has('view') && $get->get('view') == 'history') {
-					include_once('history.php');
+					include_once('views/history.php');
 				}
 		?> 
 	<!--<script src="https://code.jquery.com/jquery-3.4.0.min.js"
