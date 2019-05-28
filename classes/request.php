@@ -3,9 +3,9 @@ class Request {
 	private $values;
 	private $type;
 	
-	public const POST = 1;
-	public const GET = 2;
-	public const REQUEST = 3;
+	const POST = 1; 
+	const GET = 2;
+	const REQUEST = 3;
 	
 	/* 
 	 * Construct
