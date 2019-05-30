@@ -1,8 +1,14 @@
 <?php
+	session_start();
 	error_reporting(E_ALL);
+	include_once('config/config.inc.php');
 	include_once('classes/Request.php');
+	include_once('classes/user.php');
+	include_once('classes/session.php');
 	$request = new Request($_POST, Request::POST);
 	$get = new Request($_GET, Request::GET);
+	$user = new User();
+	$session = new Session();
 ?>
 <!doctype html>
 <html lang="pl">
@@ -16,22 +22,75 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 
-	<body> 
-		<?php 
+	<body> <?php 
+		if ($session->has('loggedin') && $session->get('loggedin') == true){
 			include_once('views/menu.php');
-				if (!$get->has('view') && !$get->get('view')) {
-					include_once('views/body.php'); 
-				} elseif ($get->has('view') && $get->get('view') == 'dispose') {
-					include_once('views/dispose.php');
-				} elseif ($get->has('view') && $get->get('view') == 'history') {
-					include_once('views/history.php');
-				} elseif ($get->has('view') && $get->get('view') == 'about') {
-					include_once('views/about.php');
-				} elseif ($get->has('view') && $get->get('view') == 'myProfile') {
-					include_once('views/myProfile.php');
+			echo '</br>';
+			if (!$get->has('view') && !$get->get('view')) {
+				include_once('views/body.php'); 
+			} elseif ($get->has('view') && $get->get('view') == 'dispose') {
+				include_once('dispose.php');
+			} elseif ($get->has('view') && $get->get('view') == 'history') {
+				include_once('history.php');
+			}
+		} else {
+			if ($get->has('view') && $get->get('view') == 'registration') {
+				if ($request->has('register') && $request->get('register') == 'true' ) {
+					if (!$request->has('username') || !$request->has('password') || !$request->has('password_check') || 
+					!$request->has('email') || !$request->has('state') || !$request->has('county')) { ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Nie podano wszystkich danych!
+						</div><?php
+						exit;
+					}
+					$username = $request->get('username');
+					$firstname = $request->get('firstname');
+					$lastname = $request->get('lastname');
+					$password = $request->get('password');
+					$passwordCheck = $request->get('password_check');
+					$state = $request->get('state');
+					$county = $request->get('county');
+					$city = $request->get('city');
+					$postalCode = $request->get('postal_code');
+					$street = $request->get('street');
+					$email = filter_var($request->get('email'), FILTER_VALIDATE_EMAIL);
+
+					if ($email == false) { ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Adres email jest niepoprawny!
+						</div><?php
+						exit;
+					}
+					if ($password != $passwordCheck) { ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Hasła nie są takie same!
+						</div><?php
+						exit;
+					}
+					$user = new User($username, $firstname, $lastname, $password, $email, $state, $county, $city, $postalCode, $street);
+					if($user->checkIfUserExists()){ ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span> Użytkownik lub Email już istnieje.
+						</div><?php
+						exit;
+					}
+						
+					if (!$user->save()) { ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span> Nie udało się zarejestrować użytkownika!
+						</div><?php
+						exit;
+					} ?>
+					<div class="alert alert-success" role="alert">
+						<span class="font-weight-bold">Sukces!</span> Zarejestrowano użytkownika.
+					</div><?php
+				} else {
+					include_once('views/registration.php');
 				}
-			include_once('views/footer.php');
-		?> 
+			} else {
+				include_once('views/login.php');
+			}
+		} ?>
 	<!--<script src="https://code.jquery.com/jquery-3.4.0.min.js"
 		integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
 		crossorigin="anonymous"></script>
