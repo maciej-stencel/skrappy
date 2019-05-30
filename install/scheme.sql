@@ -6,7 +6,7 @@ CREATE TABLE users (
   password VARCHAR(250) NOT NULL,
   email VARCHAR(150) NOT NULL,
   state VARCHAR(250) NOT NULL,
-  country VARCHAR(250) NOT NULL,
+  county VARCHAR(250) NOT NULL,
   city VARCHAR(250) NOT NULL,
   postal_code VARCHAR(250) NOT NULL,
   street VARCHAR(250) NOT NULL)
