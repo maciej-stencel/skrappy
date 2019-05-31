@@ -26,12 +26,6 @@
 		<div class="container"><?php 
 		$password = $request->get('password');
 		$username = $request->get('username');
-		if ($get->get('view') == 'logout') {
-			$session->setGlobal('loggedin', false); ?>
-			<div class="alert alert-success" role="alert">
-				<span class="font-weight-bold">Sukces!</span>  Pomyślnie wylogowano z konta.
-			</div> <?php
-		}
 		if ($get->get('view') == 'logout' || !$get->get('view')) {
 			if ($request->has('submit')) {
 				if ($username == false) { ?>
@@ -55,6 +49,10 @@
 			}
 		} ?>
 		</div><?php
+		if ($get->get('view') == 'logout') {
+			$session->setGlobal('loggedin', false); 
+			header('Location: index.php');
+		}
 		if ($session->has('loggedin') && $session->get('loggedin') == true){
 			include_once('views/menu.php');
 			echo '</br>';
@@ -68,7 +66,7 @@
 				include_once('views/about.php');
 			} elseif ($get->has('view') && $get->get('view') == 'myProfile') {
 				include_once('views/myProfile.php');
-			}
+			} 
 			include_once('views/footer.php');
 		} else {
 			if ($get->has('view') && $get->get('view') == 'registration') {
