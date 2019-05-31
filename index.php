@@ -26,26 +26,24 @@
 		<div class="container"><?php 
 		$password = $request->get('password');
 		$username = $request->get('username');
-		if ($get->get('view') == 'logout' || !$get->get('view')) {
-			if ($request->has('submit')) {
-				if ($username == false) { ?>
+		if (!$get->has('view') && $request->get('submit', false) == 'Zaloguj się') {
+			if ($username == false) { ?>
+				<div class="alert alert-danger" role="alert">
+					<span class="font-weight-bold">Błąd!</span>  Nie podano loginu!
+				</div><?php
+			} elseif ($password == false) { ?>
+				<div class="alert alert-danger" role="alert">
+					<span class="font-weight-bold">Błąd!</span>  Nie podano hasła!
+				</div><?php
+			} elseif($password && $username) {
+				if ($user->checklogin($username, $password)) {
+					$session->setGlobal("loggedin", true);
+					$session->setGlobal("profileName", $user->getName($username));
+				} else { ?>
 					<div class="alert alert-danger" role="alert">
-						<span class="font-weight-bold">Błąd!</span>  Nie podano loginu!
-					</div><?php
-				} elseif ($password == false) { ?>
-					<div class="alert alert-danger" role="alert">
-						<span class="font-weight-bold">Błąd!</span>  Nie podano hasła!
-					</div><?php
-				} elseif($password && $username) {
-					if ($user->checklogin($username, $password)) {
-						$session->setGlobal("loggedin", true);
-						$session->setGlobal("profile", $user->getProfile($username));
-					} else { ?>
-						<div class="alert alert-danger" role="alert">
-							<span class="font-weight-bold">Błąd!</span>  Podano błędne hasło lub login!
-						</div>
-					<?php }
-				}
+						<span class="font-weight-bold">Błąd!</span>  Podano błędne hasło lub login!
+					</div>
+				<?php }
 			}
 		} ?>
 		</div><?php

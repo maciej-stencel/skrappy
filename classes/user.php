@@ -98,7 +98,7 @@ EOT;
 		}
 		return false;
 	}
-	public function getProfile($username) {
+	public function getName($username) {
 		$db = new DB();
 		$query = <<<EOT
 SELECT 
@@ -115,6 +115,6 @@ EOT;
 			$this->firstname = $user['first_name'];
 			$this->lastname = $user['last_name'];
 		}
-		return $this->firstname . " " . $this->lastname;
+		return $this->firstname . ' ' . $this->lastname;
 	}
 }
