@@ -22,17 +22,54 @@
 		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 
-	<body> <?php 
+	<body>
+		<div class="container"><?php 
+		$password = $request->get('password');
+		$username = $request->get('username');
+		if ($get->get('view') == 'logout') {
+			$session->setGlobal('loggedin', false); ?>
+			<div class="alert alert-success" role="alert">
+				<span class="font-weight-bold">Sukces!</span>  Pomyślnie wylogowano z konta.
+			</div> <?php
+		}
+		if ($get->get('view') == 'logout' || !$get->get('view')) {
+			if ($request->has('submit')) {
+				if ($username == false) { ?>
+					<div class="alert alert-danger" role="alert">
+						<span class="font-weight-bold">Błąd!</span>  Nie podano loginu!
+					</div><?php
+				} elseif ($password == false) { ?>
+					<div class="alert alert-danger" role="alert">
+						<span class="font-weight-bold">Błąd!</span>  Nie podano hasła!
+					</div><?php
+				} elseif($password && $username) {
+					if ($user->checklogin($username, $password)) {
+						$session->setGlobal("loggedin", true);
+						$session->setGlobal("profile", $user->getProfile($username));
+					} else { ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Podano błędne hasło lub login!
+						</div>
+					<?php }
+				}
+			}
+		} ?>
+		</div><?php
 		if ($session->has('loggedin') && $session->get('loggedin') == true){
 			include_once('views/menu.php');
 			echo '</br>';
 			if (!$get->has('view') && !$get->get('view')) {
 				include_once('views/body.php'); 
 			} elseif ($get->has('view') && $get->get('view') == 'dispose') {
-				include_once('dispose.php');
+				include_once('views/dispose.php');
 			} elseif ($get->has('view') && $get->get('view') == 'history') {
-				include_once('history.php');
+				include_once('views/history.php');
+			} elseif ($get->has('view') && $get->get('view') == 'about') {
+				include_once('views/about.php');
+			} elseif ($get->has('view') && $get->get('view') == 'myProfile') {
+				include_once('views/myProfile.php');
 			}
+			include_once('views/footer.php');
 		} else {
 			if ($get->has('view') && $get->get('view') == 'registration') {
 				if ($request->has('register') && $request->get('register') == 'true' ) {

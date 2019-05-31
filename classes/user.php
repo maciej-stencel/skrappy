@@ -48,7 +48,7 @@ SELECT
 FROM 
 	users 
 WHERE
-	username = '$username' AND pass = '$password'; 
+	username = '$username' AND password = '$password'; 
 EOT;
 
 		if ($db->query($sql)) {
@@ -97,5 +97,24 @@ EOT;
 			}
 		}
 		return false;
+	}
+	public function getProfile($username) {
+		$db = new DB();
+		$query = <<<EOT
+SELECT 
+	`first_name`, `last_name`
+FROM `users` 
+WHERE 
+	`username` = '$username';
+EOT;
+		if (!$db->query($query)) {
+			echo 'Błąd zapytania sql: ' . $db->error();
+		}
+		$user = $db->fetchAssoc();
+		if ($db->rows() == 1) {
+			$this->firstname = $user['first_name'];
+			$this->lastname = $user['last_name'];
+		}
+		return $this->firstname . " " . $this->lastname;
 	}
 }

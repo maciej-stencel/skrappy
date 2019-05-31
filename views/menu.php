@@ -25,11 +25,11 @@
 					</li>
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Imię Nazwisko
+							<?php echo $session->get("profile"); ?>
 						</a>
 						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 							<a class="dropdown-item" href="?view=myProfile">Moje ustawienia</a>
-							<a class="dropdown-item" href="#">Wyloguj się</a>
+							<a class="dropdown-item" href="?view=logout">Wyloguj się</a>
 						</div>
 					</li>
 				</ul>

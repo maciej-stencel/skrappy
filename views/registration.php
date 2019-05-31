@@ -68,6 +68,11 @@
 				<button type="submit" class="btn btn-primary float-right" name="submit" value="Zarejestruj się">
 					zarejestruj się
 				</button>
+				<div class="row">
+					<div class="col-sm-12 text-right">
+						<a href="index.php">Masz konto? Zaloguj się.</a>
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>
