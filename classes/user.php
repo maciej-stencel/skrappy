@@ -98,13 +98,13 @@ EOT;
 		}
 		return false;
 	}
-	public function getName($username) {
+	public function getId($username) {
 		$db = new DB();
-		$query = <<<EOT
-SELECT 
-	`first_name`, `last_name`
-FROM `users` 
-WHERE 
+				$query = <<<EOT
+SELECT
+	`id`
+FROM `users`
+WHERE
 	`username` = '$username';
 EOT;
 		if (!$db->query($query)) {
@@ -112,9 +112,39 @@ EOT;
 		}
 		$user = $db->fetchAssoc();
 		if ($db->rows() == 1) {
+			$this->id = $user['id'];
+		}
+		return $this->id;
+	}
+	public function getInstanceById($id) {
+		$id = intval($id);
+		$db = new DB();
+				$query = <<<EOT
+SELECT 
+	`id`, `username`, `first_name`, `last_name`, `password`, `email`,`state`,`county`,`city`,`postal_code`,`street`
+FROM `users` 
+WHERE 
+	`id` = $id;
+EOT;
+		if (!$db->query($query)) {
+			echo 'Błąd zapytania sql: ' . $db->error();
+		}
+		$user = $db->fetchAssoc();
+		if ($db->rows() == 1) {
+			$this->id = intval($user['id']);
+			$this->username = $user['username'];
 			$this->firstname = $user['first_name'];
 			$this->lastname = $user['last_name'];
+			$this->password = $user['password'];
+			$this->email = $user['email'];
+			$this->state = $user['state'];
+			$this->county = $user['county'];
+			$this->city = $user['city'];
+			$this->postalCode = $user['postal_code'];
+			$this->street = $user['street'];
 		}
-		return $this->firstname . ' ' . $this->lastname;
+	}
+	public function getName() {
+		return $this->firstname . " " . $this->lastname;
 	}
 }

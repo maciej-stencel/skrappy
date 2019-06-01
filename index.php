@@ -9,6 +9,7 @@
 	$get = new Request($_GET, Request::GET);
 	$user = new User();
 	$session = new Session();
+	$user_id = 0;
 ?>
 <!doctype html>
 <html lang="pl">
@@ -24,9 +25,9 @@
 
 	<body>
 		<div class="container"><?php 
-		$password = $request->get('password');
-		$username = $request->get('username');
 		if (!$get->has('view') && $request->get('submit', false) == 'Zaloguj się') {
+			$password = $request->get('password');
+			$username = $request->get('username');
 			if ($username == false) { ?>
 				<div class="alert alert-danger" role="alert">
 					<span class="font-weight-bold">Błąd!</span>  Nie podano loginu!
@@ -36,16 +37,21 @@
 					<span class="font-weight-bold">Błąd!</span>  Nie podano hasła!
 				</div><?php
 			} elseif($password && $username) {
-				if ($user->checklogin($username, $password)) {
+				if ($userid = $user->checklogin($username, $password)) {
 					$session->setGlobal("loggedin", true);
-					$session->setGlobal("profileName", $user->getName($username));
+					$user_id = $user->getId($username);
+					$session->setGlobal("id", $user_id);
 				} else { ?>
 					<div class="alert alert-danger" role="alert">
 						<span class="font-weight-bold">Błąd!</span>  Podano błędne hasło lub login!
 					</div>
 				<?php }
 			}
-		} ?>
+		}
+		if ($session->has('loggedin')) {
+			$user->getInstanceById($session->get("id"));
+		}
+		?>
 		</div><?php
 		if ($get->get('view') == 'logout') {
 			$session->setGlobal('loggedin', false); 
