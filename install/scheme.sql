@@ -9,4 +9,14 @@ CREATE TABLE users (
   county VARCHAR(250) NOT NULL,
   city VARCHAR(250) NOT NULL,
   postal_code VARCHAR(250) NOT NULL,
-  street VARCHAR(250) NOT NULL)
+  street VARCHAR(250) NOT NULL);
+
+CREATE TABLE `dispose` (
+	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	`date` DATE, 
+	`type` TINYINT,
+	`containet_type` TINYINT,
+	`qty` MEDIUMINT,
+	`quantity_type` TINYINT,
+	`user_id` INT NOT NULL
+)

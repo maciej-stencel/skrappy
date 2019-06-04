@@ -33,6 +33,21 @@ class User {
 		$this->street = $street;
 	}
 
+	public function get($name) {
+		if (isset($this->$name)) {
+			return $this->$name;
+		}
+		return null;
+	}
+
+	public function set($name, $value) {
+		if (isset ($this->$name)) {
+			$this->$name=$value;
+			return true;
+		}
+		return false;
+	}
+
 	/* 
 	 * sprawdzanie czy podane hasło i login są poprawne
 	 * @param string $username
@@ -98,6 +113,7 @@ EOT;
 		}
 		return false;
 	}
+
 	public function getId($username) {
 		$db = new DB();
 				$query = <<<EOT

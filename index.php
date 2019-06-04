@@ -5,6 +5,8 @@
 	include_once('classes/Request.php');
 	include_once('classes/user.php');
 	include_once('classes/session.php');
+	include_once('classes/dispose.php');
+	include_once('classes/helper.php');
 	$request = new Request($_POST, Request::POST);
 	$get = new Request($_GET, Request::GET);
 	$user = new User();
@@ -63,7 +65,69 @@
 			if (!$get->has('view') && !$get->get('view')) {
 				include_once('views/body.php'); 
 			} elseif ($get->has('view') && $get->get('view') == 'dispose') {
-				include_once('views/dispose.php');
+				if ($request->has('dispose')) {
+					if (!$request->has('date') || !$request->has('type') || !$request->has('container_type') || 
+					!$request->has('qty') || !$request->has('quantity_type')){?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Nie podano wszystkich danych!
+						</div><?php
+						exit;
+					}
+					$date = $request->get('date');
+					if (Helper::checkDate($date) == false) {?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Podano nie poprawną date!
+						</div><?php
+						exit;
+					}
+					$type = $request->get('type');
+					if ($type != Dispose::TYPE_MIXED && 
+						$type != Dispose::TYPE_PLASTIC &&
+						$type != Dispose::TYPE_PAPER &&
+						$type != Dispose::TYPE_IRON &&
+						$type != Dispose::TYPE_ALUMINIUM &&
+						$type != Dispose::TYPE_COPPER &&
+						$type != Dispose::TYPE_METAL_OTHER) {?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Niepoprawny typ odpadów!
+						</div><?php
+						exit;
+					}
+					$containerType = $request->get('container_type');
+					if ($containerType != Dispose::CONTAINER_BAG && 
+						$containerType != Dispose::CONTAINER_BIN) {?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Niepoprawny rodzaj kontenera!
+						</div><?php
+						exit;
+					}
+					$qty = intval($request->get('qty'));
+					if ($qty == 0) {?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Nie podano ilości odpadów!
+						</div><?php
+						exit;
+					}
+					$quantityType = intval($request->get('quantity_type'));
+					if ($quantityType != Dispose::QTY_LITRE && $quantityType != Dispose::QTY_KILOGRAM) {?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Niepoprawny rodzaj ilości odpadów!
+						</div><?php
+						exit;
+					}
+					$dispose = new Dispose($date, $type, $containerType, $qty, $quantityType, $user->get('id'));
+					if (!$dispose->save()) { ?>
+						<div class="alert alert-danger" role="alert">
+							<span class="font-weight-bold">Błąd!</span>  Nie udało sie zapisać odbioru odpadów!
+						</div><?php
+						exit;
+					} ?>
+					<div class="alert alert-success" role="alert">
+						<span class="font-weight-bold">Sukces!</span>  Udało sie zapisać odbiór odpadów!
+					</div><?php
+				} else {
+					include_once('views/dispose.php');
+				} 
 			} elseif ($get->has('view') && $get->get('view') == 'history') {
 				include_once('views/history.php');
 			} elseif ($get->has('view') && $get->get('view') == 'about') {
