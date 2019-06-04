@@ -15,7 +15,7 @@ CREATE TABLE `dispose` (
 	`id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	`date` DATE, 
 	`type` TINYINT,
-	`containet_type` TINYINT,
+	`container_type` TINYINT,
 	`qty` MEDIUMINT,
 	`quantity_type` TINYINT,
 	`user_id` INT NOT NULL
