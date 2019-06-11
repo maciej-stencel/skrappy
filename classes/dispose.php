@@ -26,6 +26,15 @@ class Dispose {
 	const QTY_LITRE = 1;
 	const QTY_KILOGRAM = 2;
 	
+	/*
+	 * constructor
+	 * @param string $date
+	 * @param int $type
+	 * @param int $containerType
+	 * @param float|int $qty
+	 * @param int $quantityType
+	 * @param int $userId
+	 */
 	public function __construct($date, $type, $containerType, $qty, $quantityType, $userId) {
 		$this->date=$date;
 		$this->type=$type;
@@ -36,7 +45,7 @@ class Dispose {
 	}
 	
 	/*
-	 * Zwraca właściwość po jej nazwie
+	 * Return value of property by name
 	 * @param string $name
 	 * @return mixed
 	 */
@@ -46,7 +55,13 @@ class Dispose {
 		}
 		return null;
 	}
-	
+
+	/*
+	 * modifies property of class
+	 * @param string $name
+	 * @param mixed $value
+	 * return bool true if success false if failed
+	 */
 	public function set($name, $value) {
 		if (isset ($this->$name)) {
 			$this->$name=$value;
@@ -56,7 +71,7 @@ class Dispose {
 	}
 		
 	/*
-	 * Zapisanie odbioru śmieci do bazy danych
+	 * Save dispose wastes to DB
 	 * @return bool
 	 */
 	public function save() {
@@ -76,4 +91,3 @@ EOT;
 	}
 	
 }
-?>
