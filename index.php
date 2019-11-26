@@ -140,7 +140,7 @@
 			if ($get->has('view') && $get->get('view') == 'registration') {
 				if ($request->has('register') && $request->get('register') == 'true' ) {
 					if (!$request->has('username') || !$request->has('password') || !$request->has('password_check') || 
-					!$request->has('email') || !$request->has('state') || !$request->has('county')) { ?>
+					!$request->has('email') || !$request->has('state_id') || !$request->has('county')) { ?>
 						<div class="alert alert-danger" role="alert">
 							<span class="font-weight-bold">Błąd!</span>  Nie podano wszystkich danych!
 						</div><?php
@@ -151,7 +151,7 @@
 					$lastname = $request->get('lastname');
 					$password = $request->get('password');
 					$passwordCheck = $request->get('password_check');
-					$state = $request->get('state');
+					$state_id = $request->get('state_id');
 					$county = $request->get('county');
 					$city = $request->get('city');
 					$postalCode = $request->get('postal_code');
@@ -170,14 +170,14 @@
 						</div><?php
 						exit;
 					}
-					$user = new User($username, $firstname, $lastname, $password, $email, $state, $county, $city, $postalCode, $street);
+					$user = new User($username, $firstname, $lastname, $password, $email, $state_id, $county, $city, $postalCode, $street);
 					if($user->checkIfUserExists()){ ?>
 						<div class="alert alert-danger" role="alert">
 							<span class="font-weight-bold">Błąd!</span> Użytkownik lub Email już istnieje.
 						</div><?php
 						exit;
 					}
-						
+
 					if (!$user->save()) { ?>
 						<div class="alert alert-danger" role="alert">
 							<span class="font-weight-bold">Błąd!</span> Nie udało się zarejestrować użytkownika!
