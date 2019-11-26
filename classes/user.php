@@ -8,31 +8,35 @@ class User {
 	private	$login;
 	private	$password;
 	private $email;
-	private $state;
+	private $state_id;
 	private $county;
 	private $city;
 	private $postalCode;
 	private $street;
 
 
-	/*
-	 * konstruktor
+	/**
+	 * Class constructor
 	 * @param srting
 	 */
-	public function __construct($login = '', $firstName = '', $lastName = '', 
-	$password = '', $email = '', $state = '', $county = '', $city = '', $postalCode = '',$street = '') {
+	public function __construct($login = '', $firstName = '', $lastName = '', $password = '', $email = '', $state_id = '', $county = '', $city = '', $postalCode = '',$street = '') {
 		$this->login = $login;
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
 		$this->password = $password;
 		$this->email = $email;
-		$this->state = $state;
+		$this->state_id = $state_id;
 		$this->county = $county;
 		$this->city = $city;
 		$this->postalCode = $postalCode;
 		$this->street = $street;
 	}
 
+	/**
+	 * Gets users property value by its name
+	 * @param string $name field name
+	 * @return mixed returns field value or null if given property does not exist
+	 */
 	public function get($name) {
 		if (isset($this->$name)) {
 			return $this->$name;
@@ -40,6 +44,12 @@ class User {
 		return null;
 	}
 
+	/**
+	 * Sets users property to given value
+	 * @param string $name field name
+	 * @param mixed $value new value
+	 * @return bool true if field value was saved, otherwise false
+	 */
 	public function set($name, $value) {
 		if (isset ($this->$name)) {
 			$this->$name=$value;
@@ -48,8 +58,8 @@ class User {
 		return false;
 	}
 
-	/* 
-	 * sprawdzanie czy podane hasło i login są poprawne
+	/**
+	 * Checks if given login and password are correct
 	 * @param string $username
 	 * @param string $password
 	 * @return bool
@@ -63,7 +73,7 @@ SELECT
 FROM 
 	users 
 WHERE
-	username = '$username' AND password = '$password'; 
+	username = '$username' AND password = '$password';
 EOT;
 
 		if ($db->query($sql)) {
@@ -75,14 +85,14 @@ EOT;
 		return false;
 	}
 
-	/*
-	 * Sprawdza czy użytkownik już istnieje
+	/**
+	 * Checks if present user by username and email exists already in db
 	 * @return bool
 	 */
 	public function checkIfUserExists() {
 		$db = new DB();
 		$sql = "SELECT count(1) FROM `users` WHERE username='{$this->login}' OR email='{$this->email}';";
-		
+
 		if($db->query($sql)){
 			$num = intval($db->fetchSingle());
 			if($num==0){
@@ -92,8 +102,8 @@ EOT;
 		}
 	}
 
-	/*
-	 * Zapisanie użytkownika do bazy danych
+	/**
+	 * Saves user to database
 	 * @return bool
 	 */
 	public function save() {
@@ -101,10 +111,9 @@ EOT;
 		$password = sha1($this->password);
 		$sql = <<<EOT
 INSERT INTO `users` 
-	(`username`, `first_name`, `last_name`, `password`, `email`,`state`,`county`,`city`,`postal_code`,`street`) 
+	(`username`, `first_name`, `last_name`, `password`, `email`, `state_id`, `county`, `city`, `postal_code`, `street`) 
 VALUES 
-	('{$this->login}', '{$this->firstName}', '{$this->lastName}', '$password', '{$this->email}', 
-	'{$this->state}', '{$this->county}', '{$this->city}', '{$this->postalCode}', '{$this->street}');
+	('{$this->login}', '{$this->firstName}', '{$this->lastName}', '$password', '{$this->email}', '{$this->state_id}', '{$this->county}', '{$this->city}', '{$this->postalCode}', '{$this->street}');
 EOT;
 		if ($db->query($sql)) {
 			if ($db->affectedRows() == 1) {
@@ -114,9 +123,14 @@ EOT;
 		return false;
 	}
 
+	/**
+	 * Returns id of user by username
+	 * @param string $username
+	 * @return int|string id of user or empty string
+	 */
 	public function getId($username) {
 		$db = new DB();
-				$query = <<<EOT
+		$query = <<<EOT
 SELECT
 	`id`
 FROM `users`
@@ -132,12 +146,18 @@ EOT;
 		}
 		return $this->id;
 	}
+
+	/**
+	 * Fill owners object with user instance by given id number
+	 * @param int $id id number of user
+	 * @return void
+	 */
 	public function getInstanceById($id) {
 		$id = intval($id);
 		$db = new DB();
 				$query = <<<EOT
 SELECT 
-	`id`, `username`, `first_name`, `last_name`, `password`, `email`,`state`,`county`,`city`,`postal_code`,`street`
+	`id`, `username`, `first_name`, `last_name`, `password`, `email`, `state_id`, `county`, `city`, `postal_code`, `street`
 FROM `users` 
 WHERE 
 	`id` = $id;
@@ -153,13 +173,18 @@ EOT;
 			$this->lastname = $user['last_name'];
 			$this->password = $user['password'];
 			$this->email = $user['email'];
-			$this->state = $user['state'];
+			$this->state_id = $user['state_id'];
 			$this->county = $user['county'];
 			$this->city = $user['city'];
 			$this->postalCode = $user['postal_code'];
 			$this->street = $user['street'];
 		}
 	}
+
+	/**
+	 * Returns full name of user
+	 * @return string first and last name
+	 */
 	public function getName() {
 		return $this->firstname . " " . $this->lastname;
 	}
