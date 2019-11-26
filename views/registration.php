@@ -28,8 +28,8 @@
 					<input type="email" class="form-control" id="email" name="email" required />
 				</div>
 				<div class="form-group">
-					<label for="state" class="font-weight-bold">Województwo<span class="mandatory">*</span>:</label>
-					<select class="form-control" id="state" name="state" required>
+					<label for="state_id" class="font-weight-bold">Województwo<span class="mandatory">*</span>:</label>
+					<select class="form-control" id="state_id" name="state_id" required>
 						<option value="">-- Wybierz --</option>
 						<option value="1">dolnośląskie</option>
 						<option value="2">kujawsko-pomorskie</option>
